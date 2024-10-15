@@ -21,7 +21,7 @@ v360p='-f bv*[height<=360]+ba/b[height<=360]'
 frugal='-S +size,+br,+res,+fps --audio-format aac --audio-quality 32k' #note to self: don't use -f "wv*[height<=240]+wa*"
 thumbnailer='--force-download-archive --cookies cookies.cok --skip-download --write-thumbnail'
 websites="youtube |soundcloud "
-logscleaner="WARNING\: \[youtube.*|ERROR\: \[|\]|.*\/.*|\:.*|.*Sign in to confirm your age\. This video may be inappropriate for some users\..*|.*This content isn't available, try again later\..*" # removed from yt-dlp logs obtained by reper. Output should be "youtube [id]
+logscleaner="WARNING\: \[.*|ERROR\: \[|\]|.*\/.*|\:.*|.*Sign in to confirm your age\. This video may be inappropriate for some users\..*|.*This content isn't available, try again later\..*" # removed from yt-dlp logs obtained by findremoved. Output should be "youtube [id]"
 #convset='-n -c:v copy -c:a flac --compression-level 12' # better quality, significantly higher filesize
 convset='-n -c:v copy -c:a aac'
 #prevents your account from getting unavailable on all videos when you use cookies.txt, even when watching videos. This is not foolproof, and it's not necessary in many cases. Recommended when making giant downloads (200+ requests in my experience)
@@ -32,8 +32,7 @@ antiban='--sleep-requests 0.5 --min-sleep-interval 3 --max-sleep-interval 30' # 
 # These functions will run after you finish downloading all the files in a parent directory.
 function findremoved() {
 	echo "Detecting deleted videos, to copy them to another folder"
-	# rate limits won't break this. You don't need cookies. $gentle is optional if you are concerned about ip ban.
-	# You completely overloooked that a youtube channel won't tell you if a video was deleted. It only shows this for playlists.
+	# rate limits won't break this. You don't need cookies. $antiban is optional if you are concerned about ip ban.
 	local parent="$1"
 	local target="$2"
 	local archive="$3"
@@ -48,14 +47,14 @@ function findremoved() {
 		found=$(comm -2 -3 <(sort "${archive}") <(sort offline.txt)); echo "$found" > "${idlists}"/found.txt # if a video is not on the channel, but you have it downloaded, it's assumed that it has been removed.
 	fi
 	sed -i -r "s/(${websites})//g" "${idlists}"/found.txt
-	for rip in $(cat "${idlists}"/found.txt); do if ! grep -Exq "${parent}/removed/.* \[$rip\]\..*" "${idlists}"/mortis.txt; then # If user deletes a file from folder, it won't be recopied. This is optional, feel free to remove or disable.
-		if ( [ -f "${parent}"/*$rip* ] || [ -f "${parent}"/thumbs/*$rip* ] ) && [ -z $direxists ]; then mkdir -p "${parent}"/removed/thumbs; direxists=true; fi # creates folder only if you have a removed file. This is a good notification, and the if is necessary to prevent spam.
-		cp -s "${parent}"/*"$rip"* "${parent}"/removed/
-		cp -s "${parent}"/thumbs/*"$rip"* "${parent}"/removed/thumbs
-		find "${parent}"/removed/ -name "*$rip*" >> "${idlists}"/mortis.txt 
+	for rip in $(cat "${idlists}"/found.txt); do if ! grep -Exq "${parent}/preserving/.* \[$rip\]\..*" "${idlists}"/mortis.txt; then # If user deletes a file from folder, it won't be recopied. This is optional, feel free to remove or disable.
+		if ( [ -f "${parent}"/*$rip* ] || [ -f "${parent}"/thumbs/*$rip* ] ) && [ -z $direxists ]; then mkdir -p "${parent}"/preserving/thumbs; direxists=true; fi # creates folder only if you have a removed file. This is a good notification, and the if is necessary to prevent spam.
+		cp -s "${parent}"/*"$rip"* "${parent}"/preserving/
+		cp -s "${parent}"/thumbs/*"$rip"* "${parent}"/preserving/thumbs
+		find "${parent}"/preserving/ -name "*$rip*" >> "${idlists}"/mortis.txt 
 	fi; done
-	mv -f "${idlists}"/offline.txt "${parent}"/removed/ # full list
-	mv -f "${idlists}"/found.txt "${parent}"/removed/ # what you are preserving
+	mv -f "${idlists}"/offline.txt "${parent}"/preserving/ # full list
+	mv -f "${idlists}"/found.txt "${parent}"/preserving/ # what you are preserving
 }
 function frugalizer() { # provides a video of much lower filesize than remnant.
 	local parent="$1"
@@ -110,11 +109,11 @@ echo downloading MyMusic Playlist
 read -n 1 -t 3 -s
 yt-dlp ${antiban} --download-archive mymusic.txt --yes-playlist ${besta} "${ytlist}PLmxPrb5Gys4cSHD1c9XtiAHO3FCqsr1OP" -o "${Music}/YT/${nameformat}"
 echo "Creating compatibility for eac3"; conveac3 "${Music}/YT" mymusic.txt
-reper "${Music}/YT" "${ytlist}PLmxPrb5Gys4cSHD1c9XtiAHO3FCqsr1OP" mymusic.txt true
+findremoved "${Music}/YT" "${ytlist}PLmxPrb5Gys4cSHD1c9XtiAHO3FCqsr1OP" mymusic.txt true
 echo downloading Gaming Music
 yt-dlp ${antiban} --download-archive gamingmusic.txt --yes-playlist ${besta} "${ytlist}PL00nN9ot3iD8DbeEIvGNml5A9aAOkXaIt" "${ytlist}PLbk0w-b2PpkdWRITIHO9AnNRaXTTxsKSK" -o "${Music}/YTGaming/${nameformat}"
 echo "Creating compatibility for eac3"; conveac3 "${Music}/YTGaming" gamingmusic.txt
-reper "${Music}/YTGaming" "${ytlist}PL00nN9ot3iD8DbeEIvGNml5A9aAOkXaIt" gamingmusic.txt true
+findremoved "${Music}/YTGaming" "${ytlist}PL00nN9ot3iD8DbeEIvGNml5A9aAOkXaIt" gamingmusic.txt true
 echo "finished the music!"
 read -n 1 -t 3 -s
 
@@ -127,44 +126,44 @@ read -n 1 -t 3 -s
 echo funny videos from reddit
 read -n 1 -t 3 -s
 yt-dlp ${antiban} --download-archive funnyreddit.txt --yes-playlist ${bestv} "${ytlist}PL3hSzXlZKYpM8XhxS0v7v4SB2aWLeCcUj" -o "${Videos}/funnyreddit/${nameformat}"
-reper "${Videos}/funnyreddit" "${ytlist}PL3hSzXlZKYpM8XhxS0v7v4SB2aWLeCcUj" funnyreddit.txt true
+findremoved "${Videos}/funnyreddit" "${ytlist}PL3hSzXlZKYpM8XhxS0v7v4SB2aWLeCcUj" funnyreddit.txt true
 echo Dance practice
 read -n 1 -t 3 -s
 yt-dlp ${antiban} --download-archive dancepractice.txt --yes-playlist ${bestv} "${ytlist}PL1F2E2EF37B160E82" -o "${Videos}/Dance Practice/${nameformat}"
-reper "${Videos}/Dance Practice" "${ytlist}PL1F2E2EF37B160E82" dancepractice.txt true
+findremoved "${Videos}/Dance Practice" "${ytlist}PL1F2E2EF37B160E82" dancepractice.txt true
 echo Soundux Soundboard
 read -n 1 -t 3 -s
 yt-dlp ${antiban} --download-archive soundboard.txt --yes-playlist ${bestmp3} "${ytlist}PLVOrGcOh_6kXwPvLDl-Jke3iq3j9JQDPB" -o "${Music}/soundboard/${nameformat}"
-reper "${Music}/soundboard" "${ytlist}PLVOrGcOh_6kXwPvLDl-Jke3iq3j9JQDPB" soundboard.txt true
+findremoved "${Music}/soundboard" "${ytlist}PLVOrGcOh_6kXwPvLDl-Jke3iq3j9JQDPB" soundboard.txt true
 echo Videos to send as a message
 read -n 1 -t 3 -s
 yt-dlp ${antiban} --download-archive fweapons.txt ${bestv} --recode-video mp4 "${ytlist}PLE3oUPGlbxnK516pl4i256e4Nx4j2qL2c" -o "${Videos}/forumweapons/${nameformat}" #alternatively -S ext:mp4:m4a or -f "bv*[ext=mp4]+ba[ext=m4a]/b[ext=mp4] / bv*+ba/b"
-reper "${Videos}/forumweapons" "${ytlist}PLE3oUPGlbxnK516pl4i256e4Nx4j2qL2c" fweapons.txt true
+findremoved "${Videos}/forumweapons" "${ytlist}PLE3oUPGlbxnK516pl4i256e4Nx4j2qL2c" fweapons.txt true
 echo Podcast Episodes
 read -n 1 -t 3 -s
 yt-dlp ${antiban} --download-archive podcast.txt ${audiolite} "${ytlist}PLJkXhqcWoCzL-p07DJh_f7JHQBFTVIg-o" -o "${Music}/Podcasts/${nameformat}"
-reper "${Music}/Podcasts" "${ytlist}PLJkXhqcWoCzL-p07DJh_f7JHQBFTVIg-o" podcast.txt true
+findremoved "${Music}/Podcasts" "${ytlist}PLJkXhqcWoCzL-p07DJh_f7JHQBFTVIg-o" podcast.txt true
 
 echo "archiving playlists"
 cd "${idlists}"/YTArchive/
 echo "liked videos, requires cookies.txt"
 yt-dlp ${antiban} --download-archive likes.txt --yes-playlist ${frugal} "${ytlist}LL" -o "${Videos}/Archives/Liked Videos/${nameformat}"
-reper "${Videos}/Archives/Liked Videos" "--cookies cookies.txt ${ytlist}LL" likes.txt true
+findremoved "${Videos}/Archives/Liked Videos" "--cookies cookies.txt ${ytlist}LL" likes.txt true
 echo "Will it? by Good Mythical Morning"
 yt-dlp ${antiban} --download-archive willit.txt --yes-playlist ${v480p} "${ytlist}PLJ49NV73ttrucP6jJ1gjSqHmhlmvkdZuf" -o "${Videos}/Archives/Will it - Good Mythical Morning/${nameformat}"
-reper "${Videos}/Archives/Will it - Good Mythical Morning" "${ytlist}PLJ49NV73ttrucP6jJ1gjSqHmhlmvkdZuf" willit.txt true
+findremoved "${Videos}/Archives/Will it - Good Mythical Morning" "${ytlist}PLJ49NV73ttrucP6jJ1gjSqHmhlmvkdZuf" willit.txt true
 
 echo "archiving channels"
 echo "HealthyGamerGG"
 yt-dlp ${antiban} --download-archive HealthyGamerGG.txt --match-filter '!is_live & !was_live & is_live != true & was_live != true & live_status != was_live & live_status != is_live & live_status != post_live & live_status != is_upcoming & original_url!*=/shorts/ & title ~= (?i)@|w/|ft.|interviews & view_count >=? 60000' --dateafter 20200221 ${frugal} "${ytcreator}UClHVl2N3jPEbkNJVx-ItQIQ/videos" -o "${Videos}/Archives/HealthyGamerGG/${nameformat}"
 remnanter "${Videos}/Archives/HealthyGamerGG"
-reper "${Videos}/Archives/HealthyGamerGG" "${ytlist}UClHVl2N3jPEbkNJVx-ItQIQ" HealthyGamerGG.txt
+findremoved "${Videos}/Archives/HealthyGamerGG" "${ytlist}UClHVl2N3jPEbkNJVx-ItQIQ" HealthyGamerGG.txt
 echo "Veritasium"
 yt-dlp ${antiban} --download-archive veritasium.txt --match-filter '!is_live & !was_live & is_live != true & was_live != true & live_status != was_live & live_status != is_live & live_status != post_live & live_status != is_upcoming & view_count >=? 1000000' ${frugal} "${ytcreator}UCHnyfMqiRRG1u-2MsSQLbXA" -o "${Videos}/Archives/veritasium/${nameformat}"
-reper "${Videos}/Archives/veritasium" "${ytlist}UCHnyfMqiRRG1u-2MsSQLbXA" veritasium.txt
+findremoved "${Videos}/Archives/veritasium" "${ytlist}UCHnyfMqiRRG1u-2MsSQLbXA" veritasium.txt
 echo "JCS"
 yt-dlp ${antiban} --download-archive JCS.txt --match-filter '!is_live & !was_live & is_live != true & was_live != true & live_status != was_live & live_status != is_live & live_status != post_live & live_status != is_upcoming' ${v480p} "${ytcreator}UCYwVxWpjeKFWwu8TML-Te9A" -o "${Videos}/Archives/JCS/${nameformat}"
-reper "${Videos}/Archives/JCS" "${ytlist}UCYwVxWpjeKFWwu8TML-Te9A" JCS.txt
+findremoved "${Videos}/Archives/JCS" "${ytlist}UCYwVxWpjeKFWwu8TML-Te9A" JCS.txt
 echo "Creating compatibility for eac3"; conveac3 "$Show/Videos/Archives"
 
 echo "it's done!"
