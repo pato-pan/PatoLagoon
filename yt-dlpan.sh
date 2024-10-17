@@ -1,7 +1,7 @@
 #!/bin/bash
 echo "where there is a will, there is a bread. Always remember to share"
 echo "Hey. Please remember to manually make a backup of the descriptions of the playlists" # I had a false scare before only to find out it's a browser issue, but I still don't trust google regardless.
-# You might get some "folder does not exist" if blindly run. Mainly, create idlists folders and put cookies.txt in those folders.
+# You might get some "folder does not exist" if blindly run. Mainly, create idlists folders and put cookies.txt in those folders. Under idlists, the folders are YTArchive, logs, thumbs
 idlists="~/Documents/idlists" # where all the lists of all downloaded ids are located.
 exec &> >(tee "${idlists}/logs/yt-dlp $(date +"%Y-%m-%d %H%M%S").log") # Makes a log of the script while showing it in the terminal without colors. For terminal, do script "/path/to/idlists/logs/yt-dlp $(date +"%Y-%m-%d %H-%M-%S").log" -c "/path/to/yt-dlp-archiver.sh". For startup, xfce4-terminal -e "script '/path/to/idlists/logs/yt-dlp $(date +"%Y-%m-%d %H-%M-%S").log' -c '/path/to/yt-dlp-archiver.sh'"
 nameformat="%(title)s - %(uploader)s [%(id)s].%(ext)s"
