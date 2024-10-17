@@ -137,7 +137,7 @@ yt-dlp ${antiban} --download-archive soundboard.txt --yes-playlist ${default} ${
 findremoved "${Music}/soundboard" "${ytlist}PLVOrGcOh_6kXwPvLDl-Jke3iq3j9JQDPB" soundboard.txt true
 echo Videos to send as a message
 read -n 1 -t 3 -s
-yt-dlp ${antiban} --download-archive fweapons.txt ${default} ${bestv} --recode-video mp4 "${ytlist}PLE3oUPGlbxnK516pl4i256e4Nx4j2qL2c" -o "${Videos}/forumweapons/${nameformat}" #alternatively -S ext:mp4:m4a or -f "bv*[ext=mp4]+ba[ext=m4a]/b[ext=mp4] / bv*+ba/b"
+yt-dlp ${antiban} --download-archive fweapons.txt ${default} ${bestv}  ---merge-output-format mp4 --remux mp4 --recode-video mp4 "${ytlist}PLE3oUPGlbxnK516pl4i256e4Nx4j2qL2c" -o "${Videos}/forumweapons/${nameformat}" #alternatively -S ext:mp4:m4a or -f "bv*[ext=mp4]+ba[ext=m4a]/b[ext=mp4] / bv*+ba/b"
 findremoved "${Videos}/forumweapons" "${ytlist}PLE3oUPGlbxnK516pl4i256e4Nx4j2qL2c" fweapons.txt true
 echo Podcast Episodes
 read -n 1 -t 3 -s
