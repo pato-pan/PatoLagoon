@@ -20,6 +20,7 @@ v480p='-f bv*[height<=480]+ba/b[height<=480]'
 v360p='-f bv*[height<=360]+ba/b[height<=360]'
 frugal='-S +size,+br,+res,+fps --audio-format aac --audio-quality 32k' #note to self: don't use -f "wv*[height<=240]+wa*"
 thumbnailer='--force-write-archive --cookies cookies.txt --skip-download --write-thumbnail'
+#thumbnailer='--force-write-archive --cookies cookies.txt --skip-download --write-thumbnail --write-description --write-info-json --write-playlist-metafiles --write-link --sub-langs all --write-subs' # Download more than just thumbnails for archival reasons. This is not really a thumbnailer then.
 websites="youtube |soundcloud "
 logscleaner="WARNING\: \[.*|ERROR\: \[|\]|.*\/.*|\:.*|.*Sign in to confirm your age\. This video may be inappropriate for some users\..*|.*This content isn't available, try again later\..*" # removed from yt-dlp logs obtained by findremoved. Output should be "youtube [id]"
 #convset='-n -c:v copy -c:a flac --compression-level 12' # better quality, significantly higher filesize
@@ -170,7 +171,7 @@ echo "it's done!"
 read -n 1 -t 30 -s
 exit
 
-# echo collect thumbnails. Currently, no nice and short way to do it without doubling the amount of lines in your script. Here's the command I use which I include at the bottom of my script, I also included that I prefer to run reper here, since that prioritizes the downloads
+# echo collect thumbnails. Currently, no nice and short way to do it without doubling the amount of lines in your script. Here's the command I use which I include at the bottom of my script. I advice againt using findremoved with thumbnails because --force-overwrites makes the archives unreliable, it won't work for a youtube channel.
 cd "${idlists}"/thumbs
 yt-dlp ${antiban} --download-archive likes.txt ${thumbnailer} "${ytlist}LL" -o "${Videos}/Archives/Liked Videos/thumbs/${nameformat}"
 findremoved "${Videos}/Archives/Liked Videos" "--cookies cookies.txt ${ytlist}LL" likes.txt true
