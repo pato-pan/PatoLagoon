@@ -179,8 +179,6 @@ exit
 # echo collect thumbnails. Currently, no nice and short way to do it without doubling the amount of lines in your script. Here's the command I use which I include at the bottom of my script. I advice againt using findremoved with thumbnails because --force-overwrites makes the archives unreliable, it won't work for a youtube channel.
 cd "${idlists}"/thumbs
 yt-dlp ${antiban} --download-archive likes.txt ${thumbnailer} "${ytlist}LL" -o "${Videos}/Archives/Liked Videos/thumbs/${nameformat}"
-findremoved "${Videos}/Archives/Liked Videos" "--cookies cookies.txt ${ytlist}LL" likes.txt true
 yt-dlp ${antiban} --download-archive HealthyGamerGG.txt ${thumbnailer} "${ytcreator}UClHVl2N3jPEbkNJVx-ItQIQ/videos" -o "${Videos}/Archives/HealthyGamerGG/thumbs/${nameformat}"
-findremoved "${Videos}/Archives/HealthyGamerGG" "${ytlist}UClHVl2N3jPEbkNJVx-ItQIQ" HealthyGamerGG.txt
 # (not used, untested) --match-filter "duration < 3600" exclude videos that are over one hour
 # (not used, untested) --match-filter "duration > 120" exclude videos that are under 2 minutes
