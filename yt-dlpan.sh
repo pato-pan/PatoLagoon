@@ -53,7 +53,7 @@ function findremoved() {
 		fi
 		sed -i -r "s/(${websites})//g" found.txt
 		for gone in $(cat found.txt); do if ! grep -Exq "${parent}/preserving/.* \[$gone\]\..*" "${idlists}"/foundremoved.txt; then # If user deletes a file from folder, it won't be recopied. This is optional, feel free to remove or disable.
-			if ( [ -f "${parent}"/*$gone* ] || [ -f "${parent}"/thumbs/*$gone* ] ) && [[ $direxists != true ]]; then mkdir -p "${parent}"/preserving/thumbs; local direxists=true; fi # creates folder only if you have a removed file. This is a good notification, and the if is necessary to prevent spam.
+			if [[ $direxists != true ]]; then mkdir -p "${parent}"/preserving/thumbs; local direxists=true; fi # creates folder only if you have a removed file. This is a good notification, and the if is necessary to prevent spam.
 			cp -vs "${parent}"/*"$gone"* "${parent}"/preserving/
 			cp -vs "${parent}"/thumbs/*"$gone"* "${parent}"/preserving/thumbs
 			find "${parent}"/preserving/ -name "*$gone*" >> "${idlists}"/foundremoved.txt 
