@@ -37,9 +37,9 @@ function findremoved() {
 	local target="$2"
 	local archive="$3"
 	local tracking="$4"
-	if [ $(( $(date +%s) - ($(date +%s -r "${parent}"/preserving/found.txt)+0) )) -le 7889238 ]; then # Currently set to skip if it was last run less than 3 months old.
-		# Necessary since this makes too many requests and takes too much time. This can only be calculated in seconds if you want to change this.
+	if [ $(( $(date +%s) - ($(date +%s -r "${parent}"/preserving/found.txt)+0) )) -le 7889238 ]; then # Currently set to skip if it was last run less than 3 months ago. Necessary since this makes too many requests and takes too much time. This can only be calculated in seconds if you want to change this.
   		echo "Not checking for deleted videos because the last check was too recent"
+		echo "This could be an error in the case your found.txt/offline.txt is incomplete/you interrupted the script before it was done. Please delete before trying again"
     	else
 		echo "Detecting deleted videos, to link them to another folder"
 		rm "${idlists}"/offline.txt; rm "${idlists}"/found.txt
