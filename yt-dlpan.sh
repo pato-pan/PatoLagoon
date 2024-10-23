@@ -97,8 +97,9 @@ function conveac3() {
 				success=$?
        				#ffmpeg -i "$f" ${convset} "${nemu%.m4a}".flac
 				ffmpeg -i "$f" ${convset} "${nemu%.m4a}".m4a #I know adding m4a here is redundant. It should only be $f instead. This is only here for consistency.
-    				if [ "$(($success+$?))" -eq 0 ]; then echo "$f" >> "${idlists}"/conveac3.txt; fi; # adds to archive only if the previous command was successful. Equivalent to yt-dlp's download archive. Necessary because in yt-dlp you can't specify the directory of the download archive without cd'ing into it, and I don't want to redownload the files every time the script is run.
-					#if [ -z arkif ]; then echo -e "\nyoutube $id" | tee -a *.txt; for f in *.txt; do sort -uo $f $f; sed -i '/^\s*$/d' $f; done; fi; # Partially tested, might not work. [IMPORTANT: cookies can't have the txt extension] If arkif is for a group of archives (no archive is provided), it adds the ids to all the archives in the current folder. If a video is added to a playlist but is already part of another playlist in the group of archives, it won't be added again. I think this makes it not worth using, I don't recommend it, but you can use it if you wish. For now, I suggest changing your yt-dlp command so it ignores the files that had been converted, this is safer
+    				if [ "$(($success+$?))" -eq 0 ]; then echo "$f" >> "${idlists}"/conveac3.txt # adds to archive only if the previous command was successful. Equivalent to yt-dlp's download archive. Necessary because in yt-dlp you can't specify the directory of the download archive without cd'ing into it, and I don't want to redownload the files every time the script is run.
+					#if [ -z archive ]; then echo -e "\nyoutube $id" | tee -a *.txt; for f in *.txt; do sort -uo $f $f; sed -i '/^\s*$/d' $f; done; fi; # Partially tested, might not work. [IMPORTANT: cookies can't have the txt extension] If archive is for a group of archives (no archive is provided), it adds the ids to all the archives in the current folder. If a video is added to a playlist but is already part of another playlist in the group of archives, it won't be added again. I think this makes it not worth using, I don't recommend it, but you can use it if you wish. For now, I suggest changing your yt-dlp command so it ignores the files that had been converted, this is safer
+     				fi
     			fi
 		fi
 	done
