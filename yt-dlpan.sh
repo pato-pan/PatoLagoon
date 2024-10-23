@@ -37,7 +37,7 @@ function findremoved() {
 	local target="$2"
 	local archive="$3"
 	local tracking="$4"
-	if [ $(( $(date +%s) - ($(date +%s -r "${parent}"/preserving/found.txt)+0) )) -le 7889238 ]; then # Currently set to skip if it was last run less than 3 months ago. Necessary since this makes too many requests and takes too much time. This can only be calculated in seconds if you want to change this.
+	if [ $(( $(date +%s) - ($(date +%s -r "${parent}"/findremoved_check)+0) )) -le 7889238 ]; then  # Currently set to skip if it was last run less than 3 months ago or the file doesn't exist. Necessary since this makes too many requests and takes too much time. This can only be calculated in seconds if you want to change this.
   		echo "Not checking for deleted videos because the last check was too recent"
 		echo "This could be an error in the case your found.txt/offline.txt is incomplete/you interrupted the script before it was done. Please delete before trying again"
     	else
@@ -50,7 +50,7 @@ function findremoved() {
 		else
 	 		# Antiban is not necessary because it's only a few requests.
 			yt-dlp --download-archive offline.txt --force-write-archive --flat-playlist -s ${target} >/dev/null 2>&1 # lists every video the channel has. To get full logs, which also serves as a progress bar, remove >/dev/null 2>&1. There's no logs by default because this is similar to your download command.
-			found=$(comm -2 -3 <(sort "${archive}") <(sort offline.txt)); echo "$found" > found.txt # if a video is not on the channel, but you have it downloaded, it's assumed that it has been removed.
+			found=$(comm -2 -3 <(sort -u "${archive}" "${idlists}/thumbs/${archive}") <(sort offline.txt)); echo "$found" > found.txt # if a video is not on the channel, but you have it downloaded, it's assumed that it has been removed.
 		fi
 		sed -i -r "s/(${websites})//g" found.txt
 		for gone in $(cat found.txt); do if ! grep -Exq "${parent}/preserving/.* \[$gone\]\..*" "${idlists}"/foundremoved.txt; then # If user deletes a file from folder, it won't be recopied. This is optional, feel free to remove or disable.
@@ -61,6 +61,7 @@ function findremoved() {
 		fi; done
 		mv -vf "${idlists}"/offline.txt "${parent}"/preserving/ # full list
 		mv -vf "${idlists}"/found.txt "${parent}"/preserving/ # what you are preserving
+  		touch "${parent}"/findremoved_check # the modification date of this file tracks when this function was last run on this folder. Disable this and add it every time after the function is called if you need to run this function multiple times on the same folder. This is unavoidable in rare cases (example: liked videos from multiple accounts).
   	fi
 }
 function frugalizer() { # provides a video of much lower filesize than remnant.
