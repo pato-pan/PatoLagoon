@@ -45,12 +45,11 @@ function findremoved() {
 		rm "${idlists}"/offline.txt; rm "${idlists}"/found.txt
 		if [ $tracking ]; then
 	 		# Antiban is not necessary since the error won't interfere. It's only here to play it safe. I suggest you take the risk and remove it since it will take so much longer with antiban.
-			yt-dlp ${antiban} -s ${target} 2>&1 >/dev/null | perl -pe "s/(${logscleaner})//g" | sed -r '/^\s*$/d' | tee offline.txt # detector of deleted videos. To get full logs, which also serves as a progress bar, replace "2>&1 >/dev/null" with "2> >(tee >(cat 1>&2) pipes)". Full logs are the same as download, so they are limited by default. Warbo stackoverflow 45798436
-			found=$(comm -1 -2 <(sort "${archive}") <(sort offline.txt)); echo "$found" > found.txt # Gets only the deleted files that had been downloaded previously. This is unnecessary, and it only reduces the amount of commands, the log size(arguably), and it insignificantly decreases time.
+			yt-dlp ${antiban} -s ${target} 2>&1 >/dev/null | perl -pe "s/(${logscleaner})//g" | sed -r '/^\s*$/d' | tee found.txt # detector of deleted videos. To get full logs, which also serves as a progress bar, replace "2>&1 >/dev/null" with "2> >(tee >(cat 1>&2) pipes)". Full logs are the same as download, so they are limited by default. Warbo stackoverflow 45798436
 		else
 	 		# Antiban is not necessary because it's only a few requests.
 			yt-dlp --download-archive offline.txt --force-write-archive --flat-playlist -s ${target} >/dev/null 2>&1 # lists every video the channel has. To get full logs, which also serves as a progress bar, remove >/dev/null 2>&1. There's no logs by default because this is similar to your download command.
-			found=$(comm -2 -3 <(sort "${archive}") <(sort offline.txt)); echo "$found" > found.txt # if a video is not on the channel, but you have it downloaded, it's assumed that it has been removed.
+			found=$(comm -2 -3 <(sort -u "${archive}" "${idlists}/thumbs/${archive}") <(sort offline.txt)); echo "$found" > found.txt # if a video is not on the channel, but you have it downloaded, it's assumed that it has been removed.
 		fi
 		sed -i -r "s/(${websites})//g" found.txt
 		for gone in $(cat found.txt); do if ! grep -Exq "${parent}/preserving/.* \[$gone\]\..*" "${idlists}"/foundremoved.txt; then # If user deletes a file from folder, it won't be recopied. This is optional, feel free to remove or disable.
