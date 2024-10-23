@@ -32,16 +32,16 @@ antiban='--sleep-requests 0.5 --min-sleep-interval 3 --max-sleep-interval 20' # 
 
 # These functions will run after you finish downloading all the files in a parent directory.
 function findremoved() {
+	# rate limits won't break this. You don't need cookies. $antiban is optional if you are concerned about ip ban.
+	local parent="$1"
+	local target="$2"
+	local archive="$3"
+	local tracking="$4"
 	if [ $(( $(date +%s) - ($(date +%s -r "${parent}"/preserving/found.txt)+0) )) -le 7889238 ]; then # Currently set to skip if it was last run less than 3 months old.
 		# Necessary since this makes too many requests and takes too much time. This can only be calculated in seconds if you want to change this.
   		echo "Not checking for deleted videos because the last check was too recent"
     	else
 		echo "Detecting deleted videos, to link them to another folder"
-		# rate limits won't break this. You don't need cookies. $antiban is optional if you are concerned about ip ban.
-		local parent="$1"
-		local target="$2"
-		local archive="$3"
-		local tracking="$4"
 		rm "${idlists}"/offline.txt; rm "${idlists}"/found.txt
 		if [ $tracking ]; then
 	 		# Antiban is not necessary since the error won't interfere. It's only here to play it safe. I suggest you take the risk and remove it since it will take so much longer with antiban.
