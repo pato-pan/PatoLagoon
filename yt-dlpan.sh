@@ -32,7 +32,7 @@ antiban='--sleep-requests 0.5 --min-sleep-interval 3 --max-sleep-interval 20' # 
 
 # These functions will run after you finish downloading all the files in a parent directory.
 function findremoved() {
-	# rate limits won't break this. You don't need cookies. $antiban is optional if you are concerned about ip ban.
+	# rate limits won't break this. You don't need cookies. $antiban is optional if you are concerned about a ban.
 	local parent="$1"
 	local target="$2"
 	local archive="$3"
