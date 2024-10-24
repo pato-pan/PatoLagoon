@@ -36,14 +36,13 @@ function findremoved() {
 	local parent="$1"
 	local target="$2"
 	local archive="$3"
-	local tracking="$4"
 	if [ $(( $(date +%s) - ($(date +%s -r "${parent}"/preserving/found.txt)+0) )) -le 7889238 ]; then # Currently set to skip if it was last run less than 3 months ago. Necessary since this makes too many requests and takes too much time. This can only be calculated in seconds if you want to change this.
   		echo "Not checking for deleted videos because the last check was too recent"
 		echo "This could be an error in the case your found.txt/offline.txt is incomplete/you interrupted the script before it was done. Please delete before trying again"
     	else
 		echo "Detecting deleted videos, to link them to another folder"
 		rm "${idlists}"/offline.txt; rm "${idlists}"/found.txt
-		if [ $tracking ]; then
+		if [ $archive ]; then
 	 		# Antiban is not necessary since the error won't interfere. It's only here to play it safe. I suggest you take the risk and remove it since it will take so much longer with antiban.
 			yt-dlp ${antiban} -s ${target} 2>&1 >/dev/null | perl -pe "s/(${logscleaner})//g" | sed -r '/^\s*$/d' | tee found.txt # detector of deleted videos. To get full logs, which also serves as a progress bar, replace "2>&1 >/dev/null" with "2> >(tee >(cat 1>&2) pipes)". Full logs are the same as download, so they are limited by default. Warbo stackoverflow 45798436
 		else
@@ -113,11 +112,11 @@ echo downloading MyMusic Playlist
 read -n 1 -t 3 -s
 yt-dlp ${antiban} --download-archive mymusic.txt --yes-playlist ${default} ${besta} "${ytlist}PLmxPrb5Gys4cSHD1c9XtiAHO3FCqsr1OP" -o "${Music}/YT/${nameformat}"
 echo "Creating compatibility for eac3"; conveac3 "${Music}/YT" mymusic.txt
-findremoved "${Music}/YT" "${ytlist}PLmxPrb5Gys4cSHD1c9XtiAHO3FCqsr1OP" mymusic.txt true
+findremoved "${Music}/YT" "${ytlist}PLmxPrb5Gys4cSHD1c9XtiAHO3FCqsr1OP" true
 echo downloading Gaming Music
 yt-dlp ${antiban} --download-archive gamingmusic.txt --yes-playlist ${default} ${besta} "${ytlist}PL00nN9ot3iD8DbeEIvGNml5A9aAOkXaIt" "${ytlist}PLbk0w-b2PpkdWRITIHO9AnNRaXTTxsKSK" -o "${Music}/YTGaming/${nameformat}"
 echo "Creating compatibility for eac3"; conveac3 "${Music}/YTGaming" gamingmusic.txt
-findremoved "${Music}/YTGaming" "${ytlist}PL00nN9ot3iD8DbeEIvGNml5A9aAOkXaIt" gamingmusic.txt true
+findremoved "${Music}/YTGaming" "${ytlist}PL00nN9ot3iD8DbeEIvGNml5A9aAOkXaIt" true
 echo "finished the music!"
 read -n 1 -t 3 -s
 
@@ -130,32 +129,32 @@ read -n 1 -t 3 -s
 echo funny videos from reddit
 read -n 1 -t 3 -s
 yt-dlp ${antiban} --download-archive funnyreddit.txt --yes-playlist ${default} ${bestv} "${ytlist}PL3hSzXlZKYpM8XhxS0v7v4SB2aWLeCcUj" -o "${Videos}/funnyreddit/${nameformat}"
-findremoved "${Videos}/funnyreddit" "${ytlist}PL3hSzXlZKYpM8XhxS0v7v4SB2aWLeCcUj" funnyreddit.txt true
+findremoved "${Videos}/funnyreddit" "${ytlist}PL3hSzXlZKYpM8XhxS0v7v4SB2aWLeCcUj" true
 echo Dance practice
 read -n 1 -t 3 -s
 yt-dlp ${antiban} --download-archive dancepractice.txt --yes-playlist ${default} ${bestv} "${ytlist}PL1F2E2EF37B160E82" -o "${Videos}/Dance Practice/${nameformat}"
-findremoved "${Videos}/Dance Practice" "${ytlist}PL1F2E2EF37B160E82" dancepractice.txt true
+findremoved "${Videos}/Dance Practice" "${ytlist}PL1F2E2EF37B160E82" true
 echo Soundux Soundboard
 read -n 1 -t 3 -s
 yt-dlp ${antiban} --download-archive soundboard.txt --yes-playlist ${default} ${bestmp3} "${ytlist}PLVOrGcOh_6kXwPvLDl-Jke3iq3j9JQDPB" -o "${Music}/soundboard/${nameformat}"
-findremoved "${Music}/soundboard" "${ytlist}PLVOrGcOh_6kXwPvLDl-Jke3iq3j9JQDPB" soundboard.txt true
+findremoved "${Music}/soundboard" "${ytlist}PLVOrGcOh_6kXwPvLDl-Jke3iq3j9JQDPB" true
 echo Videos to send as a message
 read -n 1 -t 3 -s
 yt-dlp ${antiban} --download-archive fweapons.txt ${default} ${bestv}  ---merge-output-format mp4 --remux mp4 --recode-video mp4 "${ytlist}PLE3oUPGlbxnK516pl4i256e4Nx4j2qL2c" -o "${Videos}/forumweapons/${nameformat}" #alternatively -S ext:mp4:m4a or -f "bv*[ext=mp4]+ba[ext=m4a]/b[ext=mp4] / bv*+ba/b"
-findremoved "${Videos}/forumweapons" "${ytlist}PLE3oUPGlbxnK516pl4i256e4Nx4j2qL2c" fweapons.txt true
+findremoved "${Videos}/forumweapons" "${ytlist}PLE3oUPGlbxnK516pl4i256e4Nx4j2qL2c" true
 echo Podcast Episodes
 read -n 1 -t 3 -s
 yt-dlp ${antiban} --download-archive podcast.txt ${default} ${audiolite} "${ytlist}PLJkXhqcWoCzL-p07DJh_f7JHQBFTVIg-o" -o "${Music}/Podcasts/${nameformat}"
-findremoved "${Music}/Podcasts" "${ytlist}PLJkXhqcWoCzL-p07DJh_f7JHQBFTVIg-o" podcast.txt true
+findremoved "${Music}/Podcasts" "${ytlist}PLJkXhqcWoCzL-p07DJh_f7JHQBFTVIg-o" true
 
 echo "archiving playlists"
 cd "${idlists}"/YTArchive/
 echo "liked videos, requires cookies.txt"
 yt-dlp ${antiban} --download-archive likes.txt --yes-playlist ${default} ${frugal} "${ytlist}LL" -o "${Videos}/Archives/Liked Videos/${nameformat}"
-findremoved "${Videos}/Archives/Liked Videos" "--cookies cookies.txt ${ytlist}LL" likes.txt true
+findremoved "${Videos}/Archives/Liked Videos" "--cookies cookies.txt ${ytlist}LL" true
 echo "Will it? by Good Mythical Morning"
 yt-dlp ${antiban} --download-archive willit.txt --yes-playlist ${default} ${v480p} "${ytlist}PLJ49NV73ttrucP6jJ1gjSqHmhlmvkdZuf" -o "${Videos}/Archives/Will it - Good Mythical Morning/${nameformat}"
-findremoved "${Videos}/Archives/Will it - Good Mythical Morning" "${ytlist}PLJ49NV73ttrucP6jJ1gjSqHmhlmvkdZuf" willit.txt true
+findremoved "${Videos}/Archives/Will it - Good Mythical Morning" "${ytlist}PLJ49NV73ttrucP6jJ1gjSqHmhlmvkdZuf" true
 
 echo "archiving channels"
 echo "HealthyGamerGG"
