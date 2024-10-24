@@ -95,7 +95,7 @@ function conveac3() {
 				success=$?
        				#ffmpeg -i "$f" ${convset} "${nemu%.m4a}".flac
 				ffmpeg -i "$f" ${convset} "${nemu%.m4a}".m4a #I know adding m4a here is redundant. It should only be $f instead. This is only here for consistency.
-    				if [ "$(($success+$?))" -eq 0 ]; then echo "$f" >> "${idlists}"/conveac3.txt # adds to archive only if the previous command was successful. Equivalent to yt-dlp's download archive. Necessary because in yt-dlp you can't specify the directory of the download archive without cd'ing into it, and I don't want to redownload the files every time the script is run.     				fi
+    				if [ "$(($success+$?))" -eq 0 ]; then echo "$f" >> "${idlists}"/conveac3.txt # adds to archive only if the previous command was successful. Equivalent to yt-dlp's download archive. Necessary because in yt-dlp you can't specify the directory of the download archive without cd'ing into it, and I don't want to redownload or reconvert the files every time the script is run.     				fi
     			fi
 		fi
 	done
