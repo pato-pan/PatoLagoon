@@ -10,3 +10,4 @@ echo "where there is a will, there is a bread. Always remember to share"
 # This script I feel like could be educational, but it would be much better if it pushed others to take the same approach as me.
 # I mean, this easily wins for being more attractive and fun.
 # The others are boring, quick one-liners, incomplete, etc. It's not bad, a lot of my scripts are like that, I am just saying that this is more appealing and this is how it stands out.
+#pullrequest
