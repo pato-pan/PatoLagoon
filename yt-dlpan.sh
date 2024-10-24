@@ -22,7 +22,7 @@ frugal='-S +size,+br,+res,+fps --audio-format aac --audio-quality 32k' #note to 
 thumbnailer='--force-write-archive --cookies cookies.txt --skip-download --write-thumbnail'
 #thumbnailer='--force-write-archive --cookies cookies.txt --skip-download --write-thumbnail --write-description --write-info-json --write-playlist-metafiles --write-link --sub-langs all --write-subs' # Download more than just thumbnails for archival reasons. This is not really a thumbnailer then.
 websites="youtube |soundcloud "
-logscleaner="WARNING\: \[.*|ERROR\: \[|\]|.*\/.*|\:.*|.*Sign in to confirm your age\. This video may be inappropriate for some users\..*|.*This content isn't available, try again later\..*" # removed from yt-dlp logs obtained by findremoved. Output should be "youtube [id]"
+logscleaner="WARNING\: \[.*|ERROR\: \[|\]|.*\/.*|\:.*|.*Sign in to confirm your age\. This video may be inappropriate for some users\..*|.*This content isn't available, try again later\..*|.*File name too long.*" # removed from yt-dlp logs obtained by lostmediafinder. Output should be "youtube [id]"
 #convset='-n -c:v copy -c:a flac --compression-level 12' # better quality, significantly higher filesize
 convset='-n -c:v copy -c:a aac'
 #prevents your account from getting unavailable on all videos when you use cookies.txt, even when watching videos. This is not foolproof, and it's not necessary in many cases. Recommended when making giant downloads (200+ requests in my experience)
@@ -31,7 +31,7 @@ antiban='--sleep-requests 0.5 --min-sleep-interval 3 --max-sleep-interval 20' # 
 #antiban=''
 
 # These functions will run after you finish downloading all the files in a parent directory.
-function findremoved() {
+function lostmediafinder() {
 	# rate limits won't break this. You don't need cookies. $antiban is optional if you are concerned about a ban.
 	local parent="$1"
 	local target="$2"
@@ -91,7 +91,7 @@ function conveac3() {
        				# left overs from yt-dlp errors. Always the case when --embed-metadata is used on a eac3 codec.
 	   			rm "${f%%.*}.temp.m4a"
 				rm "${f%%.*}.webp"
-				yt-dlp --download-archive ${archive} --cookies cookies.txt --force-overwrites --embed-thumbnail --embed-chapters --sub-langs all,-live_chat,-rechat -c ${besta} $id -o "${parent}/${nameformat}"
+				yt-dlp --download-archive ${archive} ${default} ${besta} --force-overwrites --remux mka $id -o "${parent}/${nameformat}"
 				success=$?
        				#ffmpeg -i "$f" ${convset} "${nemu%.m4a}".flac
 				ffmpeg -i "$f" ${convset} "${nemu%.m4a}".m4a #I know adding m4a here is redundant. It should only be $f instead. This is only here for consistency.
@@ -112,11 +112,11 @@ echo downloading MyMusic Playlist
 read -n 1 -t 3 -s
 yt-dlp ${antiban} --download-archive mymusic.txt --yes-playlist ${default} ${besta} "${ytlist}PLmxPrb5Gys4cSHD1c9XtiAHO3FCqsr1OP" -o "${Music}/YT/${nameformat}"
 echo "Creating compatibility for eac3"; conveac3 "${Music}/YT" mymusic.txt
-findremoved "${Music}/YT" "${ytlist}PLmxPrb5Gys4cSHD1c9XtiAHO3FCqsr1OP"
+lostmediafinder "${Music}/YT" "${ytlist}PLmxPrb5Gys4cSHD1c9XtiAHO3FCqsr1OP"
 echo downloading Gaming Music
 yt-dlp ${antiban} --download-archive gamingmusic.txt --yes-playlist ${default} ${besta} "${ytlist}PL00nN9ot3iD8DbeEIvGNml5A9aAOkXaIt" "${ytlist}PLbk0w-b2PpkdWRITIHO9AnNRaXTTxsKSK" -o "${Music}/YTGaming/${nameformat}"
 echo "Creating compatibility for eac3"; conveac3 "${Music}/YTGaming" gamingmusic.txt
-findremoved "${Music}/YTGaming" "${ytlist}PL00nN9ot3iD8DbeEIvGNml5A9aAOkXaIt"
+lostmediafinder "${Music}/YTGaming" "${ytlist}PL00nN9ot3iD8DbeEIvGNml5A9aAOkXaIt"
 echo "finished the music!"
 read -n 1 -t 3 -s
 
@@ -129,51 +129,51 @@ read -n 1 -t 3 -s
 echo funny videos from reddit
 read -n 1 -t 3 -s
 yt-dlp ${antiban} --download-archive funnyreddit.txt --yes-playlist ${default} ${bestv} "${ytlist}PL3hSzXlZKYpM8XhxS0v7v4SB2aWLeCcUj" -o "${Videos}/funnyreddit/${nameformat}"
-findremoved "${Videos}/funnyreddit" "${ytlist}PL3hSzXlZKYpM8XhxS0v7v4SB2aWLeCcUj"
+lostmediafinder "${Videos}/funnyreddit" "${ytlist}PL3hSzXlZKYpM8XhxS0v7v4SB2aWLeCcUj"
 echo Dance practice
 read -n 1 -t 3 -s
 yt-dlp ${antiban} --download-archive dancepractice.txt --yes-playlist ${default} ${bestv} "${ytlist}PL1F2E2EF37B160E82" -o "${Videos}/Dance Practice/${nameformat}"
-findremoved "${Videos}/Dance Practice" "${ytlist}PL1F2E2EF37B160E82"
+lostmediafinder "${Videos}/Dance Practice" "${ytlist}PL1F2E2EF37B160E82"
 echo Soundux Soundboard
 read -n 1 -t 3 -s
 yt-dlp ${antiban} --download-archive soundboard.txt --yes-playlist ${default} ${bestmp3} "${ytlist}PLVOrGcOh_6kXwPvLDl-Jke3iq3j9JQDPB" -o "${Music}/soundboard/${nameformat}"
-findremoved "${Music}/soundboard" "${ytlist}PLVOrGcOh_6kXwPvLDl-Jke3iq3j9JQDPB"
+lostmediafinder "${Music}/soundboard" "${ytlist}PLVOrGcOh_6kXwPvLDl-Jke3iq3j9JQDPB"
 echo Videos to send as a message
 read -n 1 -t 3 -s
 yt-dlp ${antiban} --download-archive fweapons.txt ${default} ${bestv}  ---merge-output-format mp4 --remux mp4 --recode-video mp4 "${ytlist}PLE3oUPGlbxnK516pl4i256e4Nx4j2qL2c" -o "${Videos}/forumweapons/${nameformat}" #alternatively -S ext:mp4:m4a or -f "bv*[ext=mp4]+ba[ext=m4a]/b[ext=mp4] / bv*+ba/b"
-findremoved "${Videos}/forumweapons" "${ytlist}PLE3oUPGlbxnK516pl4i256e4Nx4j2qL2c"
+lostmediafinder "${Videos}/forumweapons" "${ytlist}PLE3oUPGlbxnK516pl4i256e4Nx4j2qL2c"
 echo Podcast Episodes
 read -n 1 -t 3 -s
 yt-dlp ${antiban} --download-archive podcast.txt ${default} ${audiolite} "${ytlist}PLJkXhqcWoCzL-p07DJh_f7JHQBFTVIg-o" -o "${Music}/Podcasts/${nameformat}"
-findremoved "${Music}/Podcasts" "${ytlist}PLJkXhqcWoCzL-p07DJh_f7JHQBFTVIg-o"
+lostmediafinder "${Music}/Podcasts" "${ytlist}PLJkXhqcWoCzL-p07DJh_f7JHQBFTVIg-o"
 
 echo "archiving playlists"
 cd "${idlists}"/YTArchive/
 echo "liked videos, requires cookies.txt"
 yt-dlp ${antiban} --download-archive likes.txt --yes-playlist ${default} ${frugal} "${ytlist}LL" -o "${Videos}/Archives/Liked Videos/${nameformat}"
-findremoved "${Videos}/Archives/Liked Videos" "--cookies cookies.txt ${ytlist}LL"
+lostmediafinder "${Videos}/Archives/Liked Videos" "--cookies cookies.txt ${ytlist}LL"
 echo "Will it? by Good Mythical Morning"
 yt-dlp ${antiban} --download-archive willit.txt --yes-playlist ${default} ${v480p} "${ytlist}PLJ49NV73ttrucP6jJ1gjSqHmhlmvkdZuf" -o "${Videos}/Archives/Will it - Good Mythical Morning/${nameformat}"
-findremoved "${Videos}/Archives/Will it - Good Mythical Morning" "${ytlist}PLJ49NV73ttrucP6jJ1gjSqHmhlmvkdZuf"
+lostmediafinder "${Videos}/Archives/Will it - Good Mythical Morning" "${ytlist}PLJ49NV73ttrucP6jJ1gjSqHmhlmvkdZuf"
 
 echo "archiving channels"
 echo "HealthyGamerGG"
 yt-dlp ${antiban} --download-archive HealthyGamerGG.txt --match-filter '!is_live & !was_live & is_live != true & was_live != true & live_status != was_live & live_status != is_live & live_status != post_live & live_status != is_upcoming & original_url!*=/shorts/ & title ~= (?i)@|w/|ft.|interviews & view_count >=? 60000' --dateafter 20200221 ${default} ${frugal} "${ytcreator}UClHVl2N3jPEbkNJVx-ItQIQ/videos" -o "${Videos}/Archives/HealthyGamerGG/${nameformat}"
 frugalizer "${Videos}/Archives/HealthyGamerGG"
-findremoved "${Videos}/Archives/HealthyGamerGG" "${ytlist}UClHVl2N3jPEbkNJVx-ItQIQ" HealthyGamerGG.txt
+lostmediafinder "${Videos}/Archives/HealthyGamerGG" "${ytlist}UClHVl2N3jPEbkNJVx-ItQIQ" HealthyGamerGG.txt
 echo "Veritasium"
 yt-dlp ${antiban} --download-archive veritasium.txt --match-filter '!is_live & !was_live & is_live != true & was_live != true & live_status != was_live & live_status != is_live & live_status != post_live & live_status != is_upcoming & view_count >=? 1000000' ${default} ${frugal} "${ytcreator}UCHnyfMqiRRG1u-2MsSQLbXA" -o "${Videos}/Archives/veritasium/${nameformat}"
-findremoved "${Videos}/Archives/veritasium" "${ytlist}UCHnyfMqiRRG1u-2MsSQLbXA" veritasium.txt
+lostmediafinder "${Videos}/Archives/veritasium" "${ytlist}UCHnyfMqiRRG1u-2MsSQLbXA" veritasium.txt
 echo "JCS"
 yt-dlp ${antiban} --download-archive JCS.txt --match-filter '!is_live & !was_live & is_live != true & was_live != true & live_status != was_live & live_status != is_live & live_status != post_live & live_status != is_upcoming' ${default} ${v480p} "${ytcreator}UCYwVxWpjeKFWwu8TML-Te9A" -o "${Videos}/Archives/JCS/${nameformat}"
-findremoved "${Videos}/Archives/JCS" "${ytlist}UCYwVxWpjeKFWwu8TML-Te9A" JCS.txt
+lostmediafinder "${Videos}/Archives/JCS" "${ytlist}UCYwVxWpjeKFWwu8TML-Te9A" JCS.txt
 echo "Creating compatibility for eac3"; conveac3 "$Show/Videos/Archives"
 
 echo "it's done!"
 read -n 1 -t 30 -s
 exit
 
-# echo collect thumbnails. Currently, no nice and short way to do it without doubling the amount of lines in your script. Here's the command I use which I include at the bottom of my script. I advice againt using findremoved with thumbnails because --force-overwrites makes the archives unreliable, it won't work for a youtube channel.
+# echo collect thumbnails. Currently, no nice and short way to do it without doubling the amount of lines in your script. Here's the command I use which I include at the bottom of my script. I advice againt using lostmediafinder with thumbnails because --force-overwrites makes the archives unreliable, it won't work for a youtube channel.
 cd "${idlists}"/thumbs
 yt-dlp ${antiban} --download-archive likes.txt ${thumbnailer} "${ytlist}LL" -o "${Videos}/Archives/Liked Videos/thumbs/${nameformat}"
 yt-dlp ${antiban} --download-archive HealthyGamerGG.txt ${thumbnailer} "${ytcreator}UClHVl2N3jPEbkNJVx-ItQIQ/videos" -o "${Videos}/Archives/HealthyGamerGG/thumbs/${nameformat}"
