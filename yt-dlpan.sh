@@ -40,28 +40,28 @@ function lostmediafinder() {
 	local parent="$1"
 	local target="$2"
 	local archive="$3"
-	if [ $(( $(date +%s) - ($(date +%s -r "${parent}"/preserving/found.txt)+0) )) -le 7889238 ]; then # Currently set to skip if it was last run less than 3 months ago. Necessary since this makes too many requests and takes too much time. This can only be calculated in seconds if you want to change this.
+	if [ $(( $(date +%s) - ($(date +%s -r "${parent}"/preserving/lost.txt)+0) )) -le 7889238 ]; then # Currently set to skip if it was last run less than 3 months ago. Necessary since this makes too many requests and takes too much time. This can only be calculated in seconds if you want to change this.
   		echo "Not checking for deleted videos because the last check was too recent"
-		echo "This could be an error in the case your found.txt/offline.txt is incomplete/you interrupted the script before it was done. Please delete before trying again"
+		echo "This could be an error in the case your lost.txt is incomplete/you interrupted the script before it was done. Please delete before trying again"
     	else
 		echo "Detecting deleted videos, to link them to another folder"
-		rm "${idlists}"/offline.txt; rm "${idlists}"/found.txt
+		rm "${idlists}"/found.txt; rm "${idlists}"/lost.txt
 		if [ -z $archive ]; then
 	 		# Antiban is not necessary since the error won't interfere. It's only here to play it safe. I suggest you take the risk and remove it since it will take so much longer with antiban.
-			yt-dlp ${antiban} -s ${target} 2>&1 >/dev/null | perl -pe "s/(${logscleaner})//g" | sed -r '/^\s*$/d' | tee found.txt # detector of deleted videos. To get full logs, which also serves as a progress bar, replace "2>&1 >/dev/null" with "2> >(tee >(cat 1>&2) pipes)". Full logs are the same as download, so they are limited by default. Warbo stackoverflow 45798436
+			yt-dlp ${antiban} -s ${target} 2>&1 >/dev/null | perl -pe "s/(${logscleaner})//g" | sed -r '/^\s*$/d' | tee lost.txt # detector of deleted videos. To get full logs, which also serves as a progress bar, replace "2>&1 >/dev/null" with "2> >(tee >(cat 1>&2) pipes)". Full logs are the same as download, so they are limited by default. Warbo stackoverflow 45798436
 		else
 	 		# Antiban is not necessary because it's only a few requests.
-			yt-dlp --download-archive offline.txt --force-write-archive --flat-playlist -s ${target} >/dev/null # lists every video the channel has. To get full logs, which also serves as a progress bar, remove >/dev/null.
-   			found=$(comm -2 -3 <(sort -u "${archive}" "${idlists}/thumbs/${archive}") <(sort offline.txt)); echo "$found" > found.txt # if a video is not on the channel, but you have it downloaded, it's assumed that it has been removed.
+			yt-dlp --download-archive found.txt --force-write-archive --flat-playlist -s ${target} >/dev/null # lists every video the channel has. To get full logs, which also serves as a progress bar, remove >/dev/null.
+   			lost=$(comm -2 -3 <(sort -u "${archive}" "${idlists}/thumbs/${archive}") <(sort found.txt)); echo "$lost" > lost.txt # if a video is not on the channel, but you have it downloaded, it's assumed that it has been removed.
 		fi
-		sed -i -r "s/(${websites})//g" found.txt
-		for gone in $(cat found.txt); do if ! grep -Exq "${parent}/preserving/.* \[$gone\]\..*" "${idlists}"/foundremoved.txt; then # If user deletes a file from folder, it won't be recopied. This is optional, feel free to remove or disable.
+		sed -i -r "s/(${websites})//g" lost.txt
+		for gone in $(cat lost.txt); do if ! grep -Exq "${parent}/preserving/.* \[$gone\]\..*" "${idlists}"/lostmedia.txt; then # If user deletes a file from folder, it won't be recopied. This is optional, feel free to remove or disable.
 			if [[ $direxists != true ]]; then mkdir -p "${parent}"/preserving/thumbs; local direxists=true; fi # creates folder only if you have a removed file. This is a good notification, and the if is necessary to prevent spam.
 			for folder in "${parent}"/*; do if [ -d "$folder" ] && [ ! -d "thumbs" ]; then cp -vs "${parent}"/*"$gone"* "${parent}"/preserving/; fi; done
 			cp -vs "${parent}"/thumbs/*"$gone"* "${parent}"/preserving/thumbs
-			find "${parent}"/preserving/ -name "*$gone*" >> "${idlists}"/foundremoved.txt 
+			find "${parent}"/preserving/ -name "*$gone*" >> "${idlists}"/lostmedia.txt 
 		fi; done
-		mv -vf "${idlists}"/found.txt "${parent}"/preserving/ # what you are preserving
+		mv -vf "${idlists}"/lost.txt "${parent}"/preserving/ # what you are preserving
   	fi
 }
 function frugalizer() { # provides a video of much lower filesize than remnant.
