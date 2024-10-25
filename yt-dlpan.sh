@@ -57,11 +57,10 @@ function lostmediafinder() {
 		sed -i -r "s/(${websites})//g" found.txt
 		for gone in $(cat found.txt); do if ! grep -Exq "${parent}/preserving/.* \[$gone\]\..*" "${idlists}"/foundremoved.txt; then # If user deletes a file from folder, it won't be recopied. This is optional, feel free to remove or disable.
 			if [[ $direxists != true ]]; then mkdir -p "${parent}"/preserving/thumbs; local direxists=true; fi # creates folder only if you have a removed file. This is a good notification, and the if is necessary to prevent spam.
-			cp -vs "${parent}"/*"$gone"* "${parent}"/preserving/
+			for folder in "${parent}"/*; do if [ -d "$folder" ] && [ ! -d "thumbs" ]; then cp -vs "${parent}"/*"$gone"* "${parent}"/preserving/; fi; done
 			cp -vs "${parent}"/thumbs/*"$gone"* "${parent}"/preserving/thumbs
 			find "${parent}"/preserving/ -name "*$gone*" >> "${idlists}"/foundremoved.txt 
 		fi; done
-		mv -vf "${idlists}"/offline.txt "${parent}"/preserving/ # full list
 		mv -vf "${idlists}"/found.txt "${parent}"/preserving/ # what you are preserving
   	fi
 }
