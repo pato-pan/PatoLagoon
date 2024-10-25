@@ -4,7 +4,11 @@ echo "Hey. Please remember to manually make a backup of the descriptions of the 
 # You might get some "folder does not exist" if blindly run. Mainly, create idlists folders and put cookies.txt in those folders. Under idlists, the folders are YTArchive, logs, thumbs
 idlists="~/Documents/idlists" # where all the lists of all downloaded ids are located.
 exec &> >(tee "${idlists}/logs/yt-dlp $(date +"%Y-%m-%d %H%M%S").log") # Makes a log of the script while showing it in the terminal without colors. For terminal, do script "/path/to/idlists/logs/yt-dlp $(date +"%Y-%m-%d %H-%M-%S").log" -c "/path/to/yt-dlp-archiver.sh". For startup, xfce4-terminal -e "script '/path/to/idlists/logs/yt-dlp $(date +"%Y-%m-%d %H-%M-%S").log' -c '/path/to/yt-dlp-archiver.sh'"
-nameformat="%(title)s - %(uploader)s [%(id)s].%(ext)s"
+### nameformat choices explanation: 100 characters for video title and 20 for channel name in my opinion is long enough. The max for a channel name on youtube is 50. Linux limits by bytes rather than characters, so highest value is used since fonts and foreign characters occupy more than 1 byte, it prevents a title that's shorter than desired.
+#nameformat="%(title)s - %(uploader)s [%(id)s].%(ext)s" # flaw: Doesn't account for OS filename length limitation
+#nameformat="%(title).100s - %(uploader).50s [%(id)s].%(ext)s" # Flaw: Windows only, otherwise perfect. In Linux, it will fail with long filenames. 255 is the max limit for Windows, I think 100 is long enough
+nameformat="%(title)+.176B - %(uploader).50B [%(id)s].%(ext)s" # Flaw: Special fonts and japanese will be shorter than expected. This is way over 100 to account for japanese characters.
+#nameformat="%(title)+.50U - %(uploader).50B [%(id)s].%(ext)s" # Flaw: Smaller titles, removes special fonts, chance of failure with japanese. I played with this for a bit, it's a bit too annoying.
 Music="~/Music"
 Videos="~/Videos"
 ytlist="https://www.youtube.com/playlist?list="
