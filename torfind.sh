@@ -2,6 +2,7 @@
 # gets a list of every tor server. With this list, it finds the location of each server, then tells you how many servers are in each country. It will also use a local database of already located ip addresses and use that to determine the location of the server.
 # This is a modified and safer version of the script, more respectful of a website's terms.
 # You should wait an hour or more before running this again, otherwise you will get the exact same result.
+# suggestion: while true; do set -x; read -n 1 -t $(shuf -i 5400-10800 -n 1); set +x; date; ./torfind.sh; done
 # Alternative https://gist.github.com/tomac4t/ad197629456759b1c708b4a0a563d371 it provides instructions to create your own as well at the bottom. I prefer this because it's entirely bash, no python, no creating virtual environments, nothing needs to be installed besides curl, grep, and wget, not trying to learn what mmdb is, all familiar, all simple, all lightweight, all available within your own machine, with a lot less to request to the internet (basically, only the torbulkexitlist once you have your own database). 
 
 mv torcountries.txt "Utorcountries $(date +"%Y-%m-%d %H-%M").txt"
