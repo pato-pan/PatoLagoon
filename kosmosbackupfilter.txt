@@ -1,0 +1,414 @@
+# NEVER. Can break things
+- /run/media/
+
+# Syncthing things. Other devices already have it, so it's not needed and it's also not too important to keep a reliable copy
+- .stversions
+
+# Let's not make a backup of the backup if it's on the hard drive
+- /KosmosTemp
+- /KosmosTemp.7z
+
+# Should be encrypted and compressed, not copied. Security reasons
+#Wallet related things
+#Not important syncs. They are already saved in other devices
+- drives/Personal/
+- drives/Confidential/
+
+# Suggested
+- .git
+- .github
+- nohup.out
+- .VeraCrypt-lock-*
+- .Xauthority
+- .ICEauthority
+- .gksu.lock
+- .pulse
+- .pulse-cookie
+- .esd_auth
+- .local/share/RecentDocuments
+- .recently-used
+- .recently-used.xbel
+- recently-used.xbel
+- .thumbnails
+- .thumb
+- Thumbs.db
+- .DS_Store
+- .localised
+- .CFUserTextEncoding
+- .zcompdump*
+- .wget-hsts
+- .xsession-errors
+- .xsession-errors.old
+- .wayland-errors
+# Firefox
+- Programs/firefox/*.so
+- Programs/firefox/*.ja
+- .java/deployment/cache
+- .mozilla/firefox/*/minidumps
+- .mozilla/firefox/*/.parentlock
+# Electron Apps
+- .config/**/blob_storage
+- .config/**/Application Cache
+- .config/**/Cache
+- .config/**/CachedData
+- .config/**/Code Cache
+- .config/**/GPUCache
+- .config/**/Service Worker/CacheStorage
+- .var/app/**/blob_storage
+- .var/app/**/Application Cache
+- .var/app/**/Cache
+- .var/app/**/CachedData
+- .var/app/**/Code Cache
+- .var/app/**/GPUCache
+- .var/app/**/Service Worker/CacheStorage
+# ccache, remove cache but keep config
+- .ccache/?
+- .ccache/tmp
+
+# stupid
+- System Volume Information/
+- Trash/
+- .Trash-*/
+#- lost+found/
+- .snapshots/
+- /.snapshots/
+- /home/.snapshots/
+#- /lost+found/
+
+- ~/.local/share/Trash
+- .Trash-1000/
+# More trash
+- /dev/
+- /boot/EFI
+- /boot/*.img
+- /boot/vmlinuz-*
+- /proc/
+- /sys/
+- /tmp/
+- /var/cache/
+- /var/log/
+- /var/tmp/
+- /var/lib/dpkg/
+- /var/lib/apt/
+- /var/lib/dkms/*/*
+- /var/spool/rsyslog/
+- /etc/ssl/
+- /usr/bin/
+- /usr/src/
+- /usr/lib/
+- /usr/lib32/
+- /usr/include/
+- /usr/share/doc/
+- /usr/share/fonts/
+- /usr/share/locale/
+- /usr/share/wine/
+- /usr/share/nvidia/
+- /usr/share/gir-1.0/
+- /usr/share/ibus/
+- /usr/share/gtk-doc/
+- /usr/share/dotnet/
+- /usr/share/opencascade/
+- /usr/share/edk2/
+- /usr/share/man/
+- /usr/share/qt/
+- /usr/share/perl/
+- /usr/share/perl5/
+- /usr/share/vim/
+- /usr/share/help/
+- /usr/share/tessdata/
+# Home Trash
+- ~/.cache/
+- ~/.cargo/
+- ~/Documents/
+- ~/Downloads/
+- ~/.gnupg/
+- ~/.hybrid/
+- ~/.java/
+- ~/.jd/*.jar
+- ~/.jd/libs/
+- ~/.jd/jd/
+- ~/.jd/tmp/
+- ~/.jd/translations/
+- ~/.librewolf/
+- ~/.local/bin/
+- ~/.local/lib/
+- ~/.local/state/
+- ~/.m2/
+- ~/Music/
+- ~/.npm/
+- ~/.nv/
+- ~/.nvm/
+- ~/paru/
+- ~/Pictures/
+- ~/.pki/
+- ~/Public/
+- ~/.qttest/
+- ~/.steam/
+- ~/Sync/
+- ~/Templates/
+- ~/Videos/
+- ~/.vst/
+- ~/.wine/
+#home local share
+- ~/.local/share/ark/
+- ~/.local/share/audacity/
+- ~/.local/share/baloo/
+- ~/.local/share/bottles
+- ~/.local/share/copyq/
+- ~/.local/share/desktop-directories/
+- ~/.local/share/doc/
+- ~/.local/share/elisa/
+- ~/.local/share/exaile/
+- ~/.local/share/firefoxprofileswitcher/
+- ~/.local/share/flatpak/
+- ~/.local/share/fonts/
+- ~/.local/share/gegl-0.4/
+- ~/.local/share/gvfs-metadata/
+- ~/.local/share/icons/
+- ~/.local/share/jc141/
+- ~/.local/share/kate/
+- ~/.local/share/keyrings/
+- ~/.local/share/kwrite/
+- ~/.local/share/lutris/
+- ~/.local/share/man/
+- ~/.local/share/mcomix/
+- ~/.local/share/mime/
+- ~/.local/share/Mousepad/
+- ~/.local/share/nemo/
+- ~/.local/share/pnpm/
+- ~/.local/share/qBittorrent/
+- ~/.local/share/RecentDocuments/
+- ~/.local/share/ristretto/
+- ~/.local/share/sayonara/
+- ~/.local/share/SpeedCrunch/
+- ~/.local/share/stalefiles/
+- ~/.local/share/strawberry/
+- ~/.local/share/systemd/
+- ~/.local/share/totem/
+- ~/.local/share/virtualenv/
+- ~/.local/share/vulkan/
+- ~/.local/share/xfce4/
+- ~/.local/share/xorg/
+# steam
+- ~/.local/share/Steam/appcache/
+- ~/.local/share/Steam/bin/
+- ~/.local/share/Steam/clientui/
+- ~/.local/share/Steam/compatiblitytools.d/
+- ~/.local/share/Steam/depotcache/
+- ~/.local/share/Steam/friends/
+- ~/.local/share/Steam/graphics/
+- ~/.local/share/Steam/legacycompat/
+- ~/.local/share/Steam/linux32/
+- ~/.local/share/Steam/linux64/
+- ~/.local/share/Steam/logs/
+- ~/.local/share/Steam/music/
+- ~/.local/share/Steam/package/
+- ~/.local/share/Steam/public/
+- ~/.local/share/Steam/resource/
+- ~/.local/share/Steam/servers/
+- ~/.local/share/Steam/steam/
+- ~/.local/share/Steam/steamapps/**/
+- ~/.local/share/Steam/steamui/
+- ~/.local/share/Steam/steamui-public/
+- ~/.local/share/Steam/tenfoot/
+- ~/.local/share/Steam/ubuntu12_32/
+- ~/.local/share/Steam/ubuntu12_64/
+- ~/.local/share/Steam/*.dl
+
+# Trash program in my wares!
+- RPG Maker MZ/data/MyProjects/trash/*
+- Sia-UI/*
+- conda/*
+- Unity/Hub/Editor/*
+- Waydroid/data/app/*/com.google.android.gms*/*
+- Waydroid/data/app/*/com.android.vending*/*
+- Waydroid/data/system/package_cache/*
+- Waydroid/data/system/dropbox/*
+- Waydroid/data/system/*stats/*
+- /drives/*/Programs/Waydroid/apk/*
+- jellyfin/metadata/*
+- jellyfin/cache/*
+- jellyfin/work/data/subtitles/*
+- FlashPoint/FPSoftware/*
+- FlashPoint/Legacy/*
+- FlashPoint/Data/Images/*
++ /drives/*/Programs/AI/**.git
++ /drives/*/Programs/AI/**.github
+- text-generation-webui/installer_files/*
+- text-generation-webui/.git/*
+- text-generation-webui/extensions/*
+- /drives/*/Programs/AI/RVC-beta.7z
+- RVC*/runtime/*
+- RVC*/pretrained_v2/*
+- RVC*/pretrained/*
+- voice-changer/server/pretrain/*
+- voice-changer/client/demo/node_modules/*
+- voice-changer/client/lib/*
+- SillyTavern-Launcher/SillyTavern/node_modules/*
+- SillyTavern-Launcher/SillyTavern/.git/*
+- SillyTavern-Launcher/SillyTavern/public/scripts/*
+- SillyTavern-Launcher/SillyTavern/public/webfonts/*
+- SillyTavern-Launcher/SillyTavern-extras/modules/*
+- SillyTavern-Launcher/SillyTavern-extras/talkinghead/*
+- stable-diffusion-webui/venv/*
+- stable-diffusion-webui/modules/*
+- stable-diffusion.cpp/ggml/*
+- stable-diffusion.cpp/build/*
+- stable-diffusion.cpp/.git/*
+- broadcast-box/web/node_modules/*
+- RPG Maker MZ/data/nwjs-*/*
+- RPG Maker MZ/data/*.dll
+- RPG Maker MZ/data/nwjs-*/*
+- RPG Maker MZ/data/help-*/*
+- RPG Maker MZ/data/RepoUpdater/*
+- RPG Maker MZ/data/newdata/*
+- RPG Maker MZ/data/corescript/*
+- Unity/Hub/Editor/*
+- RenPy/lib/*
+- XnView/lib/*
+- XnView/AddOn/*
+- Bottles/*/.fvs/*
+- Bottles/*/.fvs/*
+- Bottles/*/cache/*
+- Bottles/*/cache/*
+- Bottles/*/drive_c original/*
+- Bottles/*/drive_c/Program Files/Epic Games/UE_*/Engine/Plugins/*
+- Bottles/*/drive_c/Program Files/Epic Games/UE_*/Engine/Binaries/*
+- Bottles/*/drive_c/Program Files/Epic Games/UE_*/Engine/Intermediate/*
+- Bottles/*/drive_c/Program Files/Epic Games/UE_*/Engine/Source/*
+- Bottles/*/drive_c/Program Files/Epic Games/UE_*/Engine/Content/Localization/*
+- Bottles/*/drive_c/Program Files/Epic Games/UE_*/Engine/Content/Internalization/*
+- Bottles/*/drive_c/Program Files/Epic Games/UE_*/Engine/Content/Editor/Slate/*
+- Bottles/*/drive_c/Program Files/Epic Games/UE_*/Engine/DerivedDataCache/*
+- Bottles/*/drive_c/Program Files/Epic Games/UE_*/Engine/Extras/*
+- Bottles/*/drive_c/Program Files/Epic Games/UE_*/Engine/Documentation/*
+
+# My wares and trash
+- .mozilla/firefox/profiles/legacyhome/*
+- /drives/*/Programs/trash/*
+- RPG Maker MZ/data/MyProjects/trash/*
+- /drives/*/Piracy/incomplete/*
+- /drives/*/Piracy/Seed/*
+- /drives/*/Piracy/torbacks/share/*
+- /drives/*/Videos/recs/camlog/*.mkv
+- /drives/*/Videos/recs/camlog/*.mp4
+- /drives/*/Videos/recs/camlog/old/*.mkv
+- /drives/*/Videos/recs/camlog/old/*.mp4
+- /drives/*/Videos/recs/camlog/trash/*.mkv
+- /drives/*/Videos/recs/camlog/trash/*.mp4
+- /drives/*/Videos/recs/Channel Recs/*.mkv
+- /drives/*/Videos/recs/Channel Recs/*.mp4
+- /drives/*/Videos/recs/Channel Recs/*.mov
+#- /drives/*/Videos/recs/Archive/frugal/*.mkv
+#- /drives/*/Videos/recs/Archive/frugal/*.mp4
+#- /drives/*/Videos/recs/Archive/frugal/*/*.mkv
+#- /drives/*/Videos/recs/Archive/frugal/*/*.mp4
+#- /drives/*/Videos/recs/Channel Recs/*/frugal/*.mkv
+#- /drives/*/Videos/recs/Channel Recs/*/frugal/*.mp4
+#- /drives/*/Videos/recs/Channel Recs/*/frugal/*/*.mkv
+#- /drives/*/Videos/recs/Channel Recs/*/frugal/*/*.mp4
+- /drives/*/Cosmosis/*.qcow2
+- /drives/*/VMs/*.qcow2
+- /drives/*/Cosmosis/Backs/*
+- /drives/*/Cosmosis/External/Redundant/*
+- /drives/*/Cosmosis/External/Devices/Temp/*/*
+- /drives/*/Cosmosis/External/Devices/USB/*
+- /drives/*/Cosmosis/External/Devices/ProteusV/*
+- /drives/*/Cosmosis/External/Devices/SoileVas/*
+- /drives/*/Cosmosis/External/Devices/Momodora/*
+- /drives/*/Cosmosis/External/Devices/Rosey/*
+#- /drives/*/Cosmosis/External/**/Temp/*
+- /drives/*/Cosmosis/External/Internet/Social media backup/previewing/*
+- SteamLibrary/steamapps/*
+- RPG Maker MZ/data/dlc/*
+- text-generation-webui/models/*
+- text-generation-webui/models/Bad/*
+- text-generation-webui/models/Alt/*
+- StableDiffussion/Models/*
+- /drives/*/Cosmosis/Redundant/*
+- /drives/*/Downloads/*
+#- /drives/*/Downloads/OldThings/*
+#- /drives/*/Downloads/OldThings.7z
+- UEViewer/.git/*
+- Killing Floor 2/Development/*
+- Killing Floor 2/Engine/*
+- Killing Floor 2/KFGame/*
+- Killing Floor 2/Soundtrack/*
+- Killing Floor 2/temp-dodi/*
+- Killing Floor 2/The Art of Killing Floor 2 Digital Artbook.pdf
+- Killing Floor 2/Uninstall/*
+- Killing Floor 2/Binaries/Win64/steam_settings/images/*
+- Wolfenstein/Return to Castle Wolfenstein/Mods/*
+- Wolfenstein/Return to Castle Wolfenstein/Fixes/*
+- Wolfenstein/Return to Castle Wolfenstein/Main/*
+- Wolfenstein/Return to Castle Wolfenstein/ET/*
+- Wolfenstein/Return to Castle Wolfenstein/Classic Return to Castle Wolfenstein/*
+- Wolfenstein/Wolfenstein/base/*
+- Deep Rock Galactic/*
+- Deep Rock Galactic/FSD/Saved/Crashes/*
+#+ Deep Rock Galactic/FSD/Saved/*
+- Daemon X Machina/*
+- Disaster Report 4/*
+- Dragon Dogma/*
+- ut2004/
+- Death Stranding/*.dll
+- Death Stranding/*.exe
+- Death Stranding/data/*
+- Death Stranding/Movies/*
+- /drives/*/Cosmosis/Bases/*.exe
+- /drives/*/Cosmosis/Bases/*.iso
+- /drives/*/Cosmosis/Bases/*.msi
+- /drives/*/Cosmosis/Bases/WinSetup/*.exe
+- /drives/*/Cosmosis/Bases/WinSetup/*.msi
+- /drives/*/Cosmosis/MetaSy*/*
+- Bottles/*.tar.gz
+- /drives/*/Cosmosis/AJillS/DaiCary/Edicion*/*
+# Game mod trash and gamepacks
+- /drives/*/Games/modding/Creations/Failed and Misc/*
+- /drives/*/Games/modding/Deep Rock Galactic/*
+- Games/Other/modding tools/mint/*
+- DRGPacker-Linux/FSD-WindowsNoEditor/*
+- DRGPacker-Linux/FSD-WindowsNoEditor.pak*
+- /drives/*/Games/modding/Killing Floor 2/*
+#- /drives/*/Games/modding/Killing Floor 2/KF2orig.7z
+#- /drives/*/Games/modding/Killing Floor 2/*/*GamePack.7z
+#- /drives/*/Games/modding/Killing Floor 2/opt/*
+#- Bottles/**/drive_c/users/**/Documents/My Games/KillingFloor2/*
+# What I wanted to backup but couldn't... not enough space.
+- /drives/*/TempPrograms
+- /drives/*/Piracy/Fren/*
+- /drives/*/Videos/recs/ArchivedRecs/old.tar
+- /drives/*/*/Completed/*
+- /drives/*/*/*/Completed/*
+- Games/Other/Installer/*
+- /drives/*/Games/*.zip
+- /drives/*/Games/*.rar
+- /drives/*/Games/*.7z
+- /drives/*/Games/*.exe
+- /drives/*/Games/*.tar*
+- /drives/*/Games/*.bz2
+- /drives/*/Games/*.xz
+- /drives/*/Games/*.AppImage
+- /drives/*/Games/Minecraft/*
+- Games/Other/modding tools/RPGVXAce_RTP.zip
+- Games/Other/modding tools/nwjs*
+# Even worse things I didn't want to exclude
+- /drives/*/Cosmosis/External/**/Full/*
+- /drives/*/Cosmosis/External/Devices/*/*
+- /drives/*/Cosmosis/External/Devices/*.7z
+- /drives/*/Cosmosis/External/Devices/*.img
+- /drives/*/Piracy/Games/*
+- /drives/*/Games/Completed/*
+#- /drives/*/Videos/Shows/Completed/Breaking Bad.tar
+- /drives/*/Games/ALT/*
+- /drives/*/Piracy/Movies/*
+- /drives/*/Piracy/Shows/*
+#- /drives/*/Videos/Projects/Completed/*
+
+# My expected size per drive (update this with yours to know how much space does your external backup device requires)
+# Root 16.6GB
+# HD 1.1TB
+# SD 410.9GB / 60.9GB
+# Personal 1.3GB
+# Confidential 2.7GB
+# total 1.4TB+52GB+(<0.1TB)
